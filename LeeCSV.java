@@ -7,15 +7,34 @@ public class LeeCSV {
         String rutaArchivo = "datos.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
+            br.readLine(); 
+
+            int contadorNotasAltas = 0;
+            int sumaEdades = 0;
+            int totalEstudiantes = 0;
+
             while ((linea = br.readLine()) != null) {
                 String[] columnas = linea.split(",");
-                for (String celda : columnas) {
-                    System.out.print(celda + "\t");
+                
+                int edad = Integer.parseInt(columnas[1].trim());
+                int nota = Integer.parseInt(columnas[2].trim());
+
+                if (nota >= 90) {
+                    contadorNotasAltas++;
                 }
-                System.out.println();
+
+                sumaEdades += edad;
+                totalEstudiantes++;
             }
-        } catch (IOException e) {
-            System.out.println("Error al leer el archivo CSV: " + e.getMessage());
+
+            double promedioEdad = (totalEstudiantes > 0) ? (double) sumaEdades / totalEstudiantes : 0;
+
+            System.out.println("Estudiantes con nota >= 90: " + contadorNotasAltas);
+            System.out.println("Promedio de edad: " + promedioEdad);
+
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Error: " + e.getMessage());
         }
+        
     }
 }
